@@ -34,7 +34,7 @@ namespace UserMaintenance
             var u = new User()
             {
                 FullName = textBox1.Text,
-                
+
             };
             users.Add(u);
         }
@@ -56,5 +56,21 @@ namespace UserMaintenance
                 }
             }
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var v = new User()
+            {
+                FullName = listBox1.SelectedItem.ToString()
+
+            };
+            users.Remove(v);
+        }
+        
+        
+       
+        
+            
+        }
     }
-}
+
