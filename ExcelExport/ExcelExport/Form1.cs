@@ -15,7 +15,7 @@ namespace ExcelExport
     public partial class Form1 : Form
     {
         private int _millon = (int)Math.Pow(10, 6);
-        
+        string[] headers;
 
         RealEstateEntities context = new RealEstateEntities();
         List<Flat> Flats;
@@ -53,6 +53,8 @@ namespace ExcelExport
                 // Tábla létrehozása
                CreateTable(); // Ennek megírása a következő feladatrészben következik
 
+                FormatTable();
+
                 // Control átadása a felhasználónak
                 xlApp.Visible = true;
                 xlApp.UserControl = true;
@@ -77,7 +79,7 @@ namespace ExcelExport
         {
             
 
-            string[] headers = new string[] {
+             headers = new string[] {
              "Kód",
              "Eladó",
              "Oldal",
@@ -146,5 +148,36 @@ namespace ExcelExport
 
             return ExcelCoordinate;
         }
+
+
+        private void FormatTable()
+        {
+            int lastRowID = xlSheet.UsedRange.Rows.Count;
+            
+
+            Excel.Range headerRange = xlSheet.get_Range(GetCell(1, 1), GetCell(1, headers.Length));
+            headerRange.Font.Bold = true;
+            headerRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+            headerRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            headerRange.EntireColumn.AutoFit();
+            headerRange.RowHeight = 40;
+            headerRange.Interior.Color = Color.LightBlue;
+            
+            
+            Excel.Range Table = xlSheet.get_Range(GetCell(1, 1), GetCell(lastRowID, headers.Length));
+
+            Table.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+
+            Excel.Range LastColumn = xlSheet.get_Range(GetCell(2, headers.Length), GetCell(lastRowID, headers.Length));
+
+            LastColumn.Interior.Color = Color.LightGreen;
+            LastColumn.NumberFormat = "#,##0.00";
+
+            Excel.Range FirstColumn= xlSheet.get_Range(GetCell(2, 1), GetCell(lastRowID, 1));
+
+            FirstColumn.Interior.Color = Color.LightYellow;
+            FirstColumn.Font.Bold = true;
+        }
+
     }
 }
