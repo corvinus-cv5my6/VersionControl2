@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,12 +17,15 @@ namespace VaR
         PortfolioEntities context = new PortfolioEntities();
         List<Tick> Ticks;
         List<PortfolioItem> Portfolio = new List<PortfolioItem>();
+        List<Decimal> nyereségekRendezve;
         public Form1()
         {
             InitializeComponent();
             Ticks = context.Ticks.ToList();
             dataGridView1.DataSource = Ticks;
+
             CreatePortfolio();
+
             List<decimal> Nyereségek = new List<decimal>();
             int intervalum = 30;
             DateTime kezdőDátum = (from x in Ticks select x.TradingDay).Min();
@@ -35,7 +39,7 @@ namespace VaR
                 Console.WriteLine(i + " " + ny);
             }
 
-            var nyereségekRendezve = (from x in Nyereségek
+             nyereségekRendezve = (from x in Nyereségek
                                       orderby x
                                       select x)
                                         .ToList();
@@ -64,9 +68,29 @@ namespace VaR
             }
             return value;
         }
-       
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var sfd = new SaveFileDialog();
+            sfd.InitialDirectory = Application.StartupPath;
 
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            using (var sw = new StreamWriter(sfd.FileName, false, Encoding.UTF8))
+            {
+                sw.WriteLine("Időszak", "Nyereség");
+                for (int i = 0; i < nyereségekRendezve.Count(); i++)
+                {
+                    sw.WriteLine(string.Format(
+                        "{0};{1}",
+                        i,
+                        nyereségekRendezve[i]
+                        )) ;
+                }
+            };
+        }
     }
 
 }
