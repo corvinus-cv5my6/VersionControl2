@@ -11,11 +11,23 @@ namespace UnitTestExample2.test
     public class AccountControllerTestFixture        
 
     {
-        [Test]
+        [
+            Test,
+            TestCase("abcd1234", false),
+            TestCase("irf@uni-corvinus", false),
+            TestCase("irf.uni-corvinus.hu", false),
+            TestCase("irf@uni-corvinus.hu", true)
+       ]
 
-        public void TestEmail(string Email, bool expectedResult)
+        public void TestValidateEmail(string email, bool expectedResult)
         {
             var accountController = new AccountController();
+
+            var actualResult = accountController.ValidateEmail(email);
+
+            // Assert
+            Assert.AreEqual(expectedResult, actualResult);
+
 
 
         }

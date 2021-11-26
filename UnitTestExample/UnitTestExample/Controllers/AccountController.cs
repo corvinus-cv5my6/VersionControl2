@@ -20,6 +20,11 @@ namespace UnitTestExample.Controllers
             AccountManager = new AccountManager();
         }
 
+        public object ValidateEmail(object email)
+        {
+            throw new NotImplementedException();
+        }
+
         public Account Register(string email, string password)
         {
             if(!ValidateEmail(email))
