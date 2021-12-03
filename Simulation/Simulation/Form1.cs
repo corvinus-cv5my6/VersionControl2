@@ -25,8 +25,8 @@ namespace Simulation
             InitializeComponent();
 
             Population = GetPopulation(@"C:\Temp\nép.csv");
-            //BirthProbabilities = GetBirthProbabilities(@"C:\Temp\születés.csv");
-            //DeathProbabilities = GetDeathProbabilities(@"C:\Temp\halál.csv");
+            BirthProbabilities = GetBirthProbabilities(@"C:\Temp\születés.csv");
+            DeathProbabilities = GetDeathProbabilities(@"C:\Temp\halál.csv");
 
             for (int year = 2005; year <= 2024; year++)
             {
@@ -60,6 +60,46 @@ namespace Simulation
                         BirthYear = int.Parse(line[0]),
                         Gender = (Gender)Enum.Parse(typeof(Gender), line[1]),
                         NbrOfChildren = int.Parse(line[2])
+                    });
+                }
+            }
+
+            return population;
+        }
+        public List<BirthProbability> GetBirthProbabilities(string csvpath)
+        {
+            List<BirthProbability> population = new List<BirthProbability>();
+
+            using (StreamReader sr = new StreamReader(csvpath, Encoding.Default))
+            {
+                while (!sr.EndOfStream)
+                {
+                    var line = sr.ReadLine().Split(';');
+                    population.Add(new BirthProbability()
+                    {
+                        Age = int.Parse(line[0]),
+                        nbrOfChildren = int.Parse(line[1]),
+                        P = double.Parse(line[2])
+                    });
+                }
+            }
+
+            return population;
+        }
+        public List<DeathProbability> GetDeathProbabilities(string csvpath)
+        {
+            List<DeathProbability> population = new List<DeathProbability>();
+
+            using (StreamReader sr = new StreamReader(csvpath, Encoding.Default))
+            {
+                while (!sr.EndOfStream)
+                {
+                    var line = sr.ReadLine().Split(';');
+                    population.Add(new DeathProbability()
+                    {
+                        Age = int.Parse(line[0]),
+                        //Gender = (line[1]),
+                        P = double.Parse(line[2])
                     });
                 }
             }
